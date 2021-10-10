@@ -84,6 +84,31 @@ public class AlgoTests
                                                       pattern,
                                                       withPos: true);
 
+        int start, end;
+
+        if(positions is null || positions.Length == 0)
+        {
+            start = result.Start;
+            end = result.End;
+        } 
+        else
+        {
+            Array.Sort(positions);
+            start = positions[0];
+            end = positions.Last() + 1;
+        }
+
+        start.Should().Be(sidx);
+        end.Should().Be(eidx);
+
         result.Score.Should().Be(expectedScore);
     }
+
+    [Fact]
+    public void TestAsciiFuzzyIndex()
+    {
+        trySkip("fooBarbaz", true, 'z', 9).Should().Be(-1);
+        asciiFuzzyIndex("fooBarbaz", "fooBarbazz", true).Should().Be(-1);
+    }
+
 }
