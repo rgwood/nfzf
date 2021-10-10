@@ -33,7 +33,6 @@ public class AlgoTests
         AssertMatch(false, true, "fooBarBaz", "fbb", 0, 7, expectedScore);
     }
 
-
     [Theory]
     [InlineData(false, true, "fooBarbaz1", "oBZ", 2, 9, ScoreMatch * 3 + BonusCamel123 + ScoreGapStart + ScoreGapExtension * 3)]
     [InlineData(false, true, "foo bar baz", "fbb", 0, 9, ScoreMatch * 3 + BonusBoundary * BonusFirstCharMultiplier + BonusBoundary * 2 + 2 * ScoreGapStart + 4 * ScoreGapExtension)]

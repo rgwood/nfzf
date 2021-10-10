@@ -214,15 +214,11 @@ public static class Algo
 
             if (c == pattern[pidx])
             {
-                Console.WriteLine($"Match: {c}, {pattern[pidx]}");
                 if(withPos)
                     pos.Add(idx);
 
-                Console.WriteLine($"Adding {ScoreMatch} (ScoreMatch) to score");
                 score += ScoreMatch;
-                Console.WriteLine($"Score:{score}");
                 int bonus = bonusFor(prevClass, c_class);
-                Console.WriteLine($"bonusFor: ({prevClass}, {c_class}) {bonus}");
 
                 if (consecutive == 0)
                 {
@@ -240,16 +236,12 @@ public static class Algo
 
                 if (pidx == 0)
                 {
-                    Console.WriteLine($"Adding first bonus ({bonus} * {BonusFirstCharMultiplier}) to score");
                     score += bonus * BonusFirstCharMultiplier;
                 }
                 else
                 {
-                    Console.WriteLine($"Adding bonus ({bonus}) to score");
                     score += bonus;
                 }
-
-                Console.WriteLine($"Score:{score}");
 
                 inGap = false;
                 consecutive++;
@@ -257,13 +249,10 @@ public static class Algo
             }
             else
             {
-                Console.WriteLine($"Match NOT found: {c}, {pattern[pidx]}");
                 if (inGap)
                     score += ScoreGapExtension;
                 else
                     score += ScoreGapStart;
-
-                Console.WriteLine($"Score:{score}");
 
                 inGap = true;
                 consecutive = 0;
