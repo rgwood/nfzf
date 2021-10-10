@@ -142,11 +142,43 @@ public static class Algo
 
     private static int indexAt(int index, int max, bool forward) => forward ? index : max - index - 1;
 
-    private static int asciiFuzzyIndex(string input, string pattern, bool caseSensitive)
+    // Optimized search for ASCII string
+    // TODO should we simplify this? Ported it mostly as-is
+    internal static int asciiFuzzyIndex(string input, string pattern, bool caseSensitive)
     {
-        // TODO implement
-        return 0;
-        //throw new NotImplementedException();
+        int firstIdx = 0;
+        int idx = 0;
+
+        for (int pidx = 0; pidx < pattern.Length; pidx++)
+        {
+            idx = trySkip(input, caseSensitive, pattern[pidx], idx);
+
+            if( idx < 0)
+            {
+                return -1;
+            }
+
+            if (pidx == 0 && idx > 0)
+            {
+                // Step back to find the right bonus point
+                firstIdx = idx - 1;
+            }
+            idx++;
+        }
+
+        return firstIdx;
+    }
+
+    // TODO: fzf has a ton of optimizations in this class that I didn't port. Necessary?
+    internal static int trySkip(string input, bool caseSensitive, char c, int from)
+    {
+        string byteArray = input.Substring(from);
+
+        int idx = byteArray.IndexOf(c, caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
+        if (idx < 0)
+            return -1;
+
+        return from + idx;
     }
 
     // func calculateScore(caseSensitive bool, normalize bool, text *util.Chars, pattern []rune, sidx int, eidx int, withPos bool) (int, *[]int) {
