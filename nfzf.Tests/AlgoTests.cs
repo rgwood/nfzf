@@ -55,7 +55,17 @@ public class AlgoTests
     [InlineData(false, true, "xFoo-Bar Baz", "foo-b", 1, 6, ScoreMatch * 5 + BonusCamel123 * BonusFirstCharMultiplier + BonusCamel123 * 2 +
                     BonusNonWord + BonusBoundary)]
 
-    [InlineData(false, true, "", "", 0, 0, 0)]
+    [InlineData(true, true, "fooBarbaz", "oBz", 2, 9, ScoreMatch * 3 + BonusCamel123 + ScoreGapStart + ScoreGapExtension * 3)]
+    [InlineData(true, true, "Foo/Bar/Baz", "FBB", 0, 9, ScoreMatch * 3 + BonusBoundary * (BonusFirstCharMultiplier + 2) + ScoreGapStart * 2 + ScoreGapExtension * 4)]
+    [InlineData(true, true, "FooBarBaz", "FBB", 0, 7, ScoreMatch * 3 + BonusBoundary * BonusFirstCharMultiplier + BonusCamel123 * 2 +
+                    ScoreGapStart * 2 + ScoreGapExtension * 2)]
+    [InlineData(true, true, "FooBar Baz", "FooB", 0, 4, ScoreMatch * 4 + BonusBoundary * BonusFirstCharMultiplier + BonusBoundary * 2 + BonusBoundary)]
+    // Consecutive bonus updated
+    [InlineData(true, true, "foo-bar", "o-ba", 2, 6, ScoreMatch * 4 + BonusBoundary * 3)]
+    // Non-match
+    [InlineData(true, true, "fooBarbaz", "oBZ", -1, -1, 0)]
+    [InlineData(true, true, "Foo Bar Baz", "fbb", -1, -1, 0)]
+    [InlineData(true, true, "fooBarbaz", "fooBarbazz", -1, -1, 0)]
 
 
 

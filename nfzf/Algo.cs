@@ -170,7 +170,6 @@ public static class Algo
             char c = text[idx];
             var c_class = charClassOf(c);
 
-
             if (!caseSensitive)
             {
                 c = char.ToLowerInvariant(c);
@@ -238,9 +237,9 @@ public static class Algo
             // word boundary
             return BonusBoundary;
         } 
-        else if (prevClass == CharClass.charLower && c_class == CharClass.charUpper 
+        else if ((prevClass == CharClass.charLower && c_class == CharClass.charUpper) 
             ||
-                 prevClass != CharClass.charNumber && c_class == CharClass.charNumber)
+                 (prevClass != CharClass.charNumber && c_class == CharClass.charNumber))
         {
             // camelCase letter123
             return BonusCamel123;
