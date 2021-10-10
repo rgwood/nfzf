@@ -26,11 +26,11 @@ public class AlgoTests
         result.Score.Should().Be(0);
     }
 
-    [Fact(Skip ="playground")]
+    [Fact(Skip ="For testing+development")]
     public void BasicAssert()
     {
-        int expectedScore = ScoreMatch * 3 + BonusCamel123 + ScoreGapStart + ScoreGapExtension * 3;
-        AssertMatch(false, true, "fooBarbaz1", "oBZ", 2, 9, expectedScore);
+        int expectedScore = ScoreMatch * 3 + BonusBoundary * BonusFirstCharMultiplier + BonusCamel123 * 2 + 2 * ScoreGapStart + 2 * ScoreGapExtension;
+        AssertMatch(false, true, "fooBarBaz", "fbb", 0, 7, expectedScore);
     }
 
 
@@ -66,8 +66,6 @@ public class AlgoTests
     [InlineData(true, true, "fooBarbaz", "oBZ", -1, -1, 0)]
     [InlineData(true, true, "Foo Bar Baz", "fbb", -1, -1, 0)]
     [InlineData(true, true, "fooBarbaz", "fooBarbazz", -1, -1, 0)]
-
-
 
     public void AssertMatch(
         bool caseSensitive, bool forward, string input, string pattern, int sidx, int eidx, int expectedScore)

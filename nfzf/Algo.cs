@@ -72,15 +72,12 @@ public static class Algo
         int lenRunes = text.Length;
         int lenPattern = pattern.Length;
 
-
-        // TODO: fzf has an optimization here instead of lowering the whole string, should we port it? 
-        if(!caseSensitive)
-            text = text.ToLowerInvariant();
-
-
         for (int index = 0; index < lenRunes; index++)
         {
             char c = text[indexAt(index, lenRunes, forward)];
+
+            if (!caseSensitive)
+                c = char.ToLower(c);
 
             // TODO not sure what normalization is here
             if (normalize)
@@ -111,6 +108,9 @@ public static class Algo
             {
                 int tidx = indexAt(index, lenRunes, forward);
                 char c = text[tidx];
+
+                if (!caseSensitive)
+                    c = char.ToLower(c);
 
                 int patternIdx_ = indexAt(patternIdx, lenPattern, forward);
                 char pchar = pattern[patternIdx_];
@@ -214,11 +214,15 @@ public static class Algo
 
             if (c == pattern[pidx])
             {
+                Console.WriteLine($"Match: {c}, {pattern[pidx]}");
                 if(withPos)
                     pos.Add(idx);
 
+                Console.WriteLine($"Adding {ScoreMatch} (ScoreMatch) to score");
                 score += ScoreMatch;
+                Console.WriteLine($"Score:{score}");
                 int bonus = bonusFor(prevClass, c_class);
+                Console.WriteLine($"bonusFor: ({prevClass}, {c_class}) {bonus}");
 
                 if (consecutive == 0)
                 {
@@ -235,9 +239,17 @@ public static class Algo
                 }
 
                 if (pidx == 0)
+                {
+                    Console.WriteLine($"Adding first bonus ({bonus} * {BonusFirstCharMultiplier}) to score");
                     score += bonus * BonusFirstCharMultiplier;
+                }
                 else
+                {
+                    Console.WriteLine($"Adding bonus ({bonus}) to score");
                     score += bonus;
+                }
+
+                Console.WriteLine($"Score:{score}");
 
                 inGap = false;
                 consecutive++;
@@ -245,10 +257,13 @@ public static class Algo
             }
             else
             {
+                Console.WriteLine($"Match NOT found: {c}, {pattern[pidx]}");
                 if (inGap)
                     score += ScoreGapExtension;
                 else
                     score += ScoreGapStart;
+
+                Console.WriteLine($"Score:{score}");
 
                 inGap = true;
                 consecutive = 0;
