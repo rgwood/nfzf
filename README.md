@@ -10,9 +10,8 @@ This is a very early WIP and it currently only includes fzf's v1 algorithm. Expe
 
 Remaining known work:
 
-- Decide exactly how we're gonna expose both fzf algorithms to consumers. Follow fzf closely or do something more idiomatic to .NET?
+- Decide exactly how we're gonna expose fzf's multiple algorithms to consumers. Follow fzf closely or do something more idiomatic to .NET?
 - Port fzf's v2 algorithm
-- Test+use the `positions` array
 - Publish to NuGet
 - Write benchmarks
 - Port remaining fzf tests

@@ -2,14 +2,12 @@ namespace nfzf.Tests;
 
 using FluentAssertions;
 using nfzf;
-using System.Diagnostics;
 using Xunit;
 
 using static nfzf.Algo;
 
 public class AlgoTests
 {
-
     [Fact]
     public void EmptyPatternGetsZeroResult()
     {
@@ -69,8 +67,6 @@ public class AlgoTests
     public void AssertMatch(
         bool caseSensitive, bool forward, string input, string pattern, int sidx, int eidx, int expectedScore)
     {
-        Debug.WriteLine(input);
-        Debug.WriteLine(pattern);
         if (!caseSensitive)
             pattern = pattern.ToLower();
 
@@ -100,6 +96,24 @@ public class AlgoTests
 
         result.Score.Should().Be(expectedScore);
     }
+
+    [Fact]
+    public void AssertPositions()
+    {
+        (Result _, int[]? positions) = Algo.FuzzyMatchV1(caseSensitive: false,
+                                                      normalize: false,
+                                                      forward: true,
+                                                      "fooBarBaz",
+                                                      "fbb",
+                                                      withPos: true);
+
+        positions!.Length.Should().Be(3);
+        // TODO: are there any situations where positions wouldn't be sorted? this will break if so
+        positions[0].Should().Be(0);
+        positions[1].Should().Be(3);
+        positions[2].Should().Be(6);
+    }
+
 
     [Fact]
     public void TestAsciiFuzzyIndex()

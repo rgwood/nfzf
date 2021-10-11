@@ -3,6 +3,7 @@
 namespace nfzf;
 
 // Result contains the results of running a match function.
+// TODO: should we diverge from fzf and include positions in the record?
 public record Result(int Start, int End, int Score);
 
 public static class Algo
