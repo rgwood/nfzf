@@ -10,9 +10,11 @@ This is a very early WIP and it currently only includes fzf's v1 algorithm. Expe
 
 Remaining known work:
 
-- Decide exactly how we're gonna expose fzf's multiple algorithms to consumers. Follow fzf closely or do something more idiomatic to .NET?
-- Port fzf's v2 algorithm
+- Decide exactly how we're gonna expose fzf's multiple algorithms to consumers. Follow fzf closely or do something more idiomatic to .NET (interfaces maybe)?
+- Understand fzf's Unicode handling and normalization better, then port it. This may involve [Rune](https://docs.microsoft.com/en-us/dotnet/api/system.text.rune?view=net-5.0#rune-in-net-vs-other-languages) which is not present in older .NET versions
+- Figure out exactly which TFMs to support. Probably multitarget .NET Standard 2.0 (for reach) and .NET 6 (for nullable reference types and maybe Rune) 
 - Publish to NuGet
 - Write benchmarks
 - Port remaining fzf tests
-- Understand fzf's Unicode handling and normalization better, then port it
+- Port fzf's v2 algorithm
+- Port fzf's other specialty algorithms (PrefixMatch, SuffixMatch, ExactMatchNaive, EqualMatch) if they look useful
