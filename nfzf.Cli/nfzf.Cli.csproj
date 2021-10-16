@@ -12,6 +12,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Terminal.Gui" Version="1.2.1" />
+		<PackageReference Include="Terminal.Gui" Version="1.2.1" />
 	</ItemGroup>
+
+	<Target Name="publish">
+		<Exec Command="dotnet publish /p:PublishProfile=FolderProfile" />
+	</Target>
+
 </Project>
