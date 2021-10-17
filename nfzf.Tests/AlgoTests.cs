@@ -2,6 +2,7 @@ namespace nfzf.Tests;
 
 using FluentAssertions;
 using nfzf;
+using System;
 using Xunit;
 
 using static nfzf.Algo;
@@ -28,7 +29,7 @@ public class AlgoTests
     public void BasicAssert()
     {
         int expectedScore = ScoreMatch * 3 + BonusBoundary * BonusFirstCharMultiplier + BonusCamel123 * 2 + 2 * ScoreGapStart + 2 * ScoreGapExtension;
-        AssertMatch(false, true, "fooBarBaz", "fbb", 0, 7, expectedScore);
+        AssertMatchV1(false, true, "fooBarBaz", "fbb", 0, 7, expectedScore);
     }
 
     [Theory]
@@ -64,9 +65,11 @@ public class AlgoTests
     [InlineData(true, true, "Foo Bar Baz", "fbb", -1, -1, 0)]
     [InlineData(true, true, "fooBarbaz", "fooBarbazz", -1, -1, 0)]
 
-    public void AssertMatch(
+    public void AssertMatchV1(
         bool caseSensitive, bool forward, string input, string pattern, int sidx, int eidx, int expectedScore)
     {
+
+
         if (!caseSensitive)
             pattern = pattern.ToLower();
 
@@ -95,6 +98,20 @@ public class AlgoTests
         end.Should().Be(eidx);
 
         result.Score.Should().Be(expectedScore);
+}
+
+    [Fact]
+    public void TestEmptyPattern()
+    {
+        foreach (bool dir in new bool[] {true, false })
+        {
+            AssertMatchV1( true, dir, "foobar", "", 0, 0, 0);
+            // todo: other algorithms
+            //    assertMatch(t, FuzzyMatchV2, true, dir, "foobar", "", 0, 0, 0)
+            //    assertMatch(t, ExactMatchNaive, true, dir, "foobar", "", 0, 0, 0)
+            //    assertMatch(t, PrefixMatch, true, dir, "foobar", "", 0, 0, 0)
+            //    assertMatch(t, SuffixMatch, true, dir, "foobar", "", 6, 6, 0)
+        }
     }
 
     [Fact]
