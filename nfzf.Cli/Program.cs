@@ -1,13 +1,11 @@
 ﻿using Terminal.Gui;
 using nfzf;
 
-// todo: change this based on terminal size?
-const int MaxResultsAtOnce = 20;
-
 Application.Init();
 var top = Application.Top;
 
 List<string> allRows = cannedRows();
+List<string> currentRows = new();
 
 var textField = new TextField("")
 {
@@ -16,12 +14,58 @@ var textField = new TextField("")
     Width = Dim.Fill()
 };
 
+
 var list = new ListView();
 list.Height = Dim.Fill(1);
 list.X = 0;
 list.Y = 0;
 list.Width = Dim.Fill();
 list.CanFocus = false; // HACK: not sure how else to get the textbox to have initial focus
+
+list.OpenSelectedItem += args => {
+    string selected = currentRows[args.Item];
+    throw new NotImplementedException($"Enter: {selected}");
+};
+
+list.KeyPress += args => {
+    switch(args.KeyEvent.Key)
+    {
+        case Key.CursorUp:
+            return;
+        case Key.Enter:
+            // string selected = currentRows[list.SelectedItem];
+            // throw new NotImplementedException($"Enter: {selected}");
+
+            break;
+
+        case Key.Esc:
+            textField.SetFocus();
+            break;
+        case Key.CursorDown:
+            if(list.SelectedItem >= currentRows.Count() -1)
+            {
+                textField.SetFocus();
+                args.Handled = true;
+            }
+            break;
+        default:
+            textField.SetFocus();
+            break;
+    }
+};
+
+textField.KeyPress += args =>
+{
+        switch(args.KeyEvent.Key)
+    {
+        case Key.CursorUp:
+            // string selected = currentRows[list.SelectedItem];
+            //throw new NotImplementedException($"Enter: {selected}");
+            list.CanFocus = true;
+            list.SelectedItem = currentRows.Count() - 1;
+            break;
+    }
+};
 
 textField.TextChanged += (oldText) =>
 {
@@ -32,7 +76,11 @@ top.Add(
     list,
     textField);
 
-top.Initialized += (_, _) => ReloadList();
+top.Initialized += (_, _) => 
+{
+    ReloadList();
+    textField.SetFocus();
+};
 
 Application.Run();
 
@@ -44,7 +92,8 @@ void ReloadList()
 
     if (string.IsNullOrEmpty(query))
     {
-        list.SetSource(allRows.Take(listHeight).ToList());
+        currentRows = allRows.Take(listHeight).ToList();
+        list.SetSource(currentRows);
     }
     else
     {
@@ -54,10 +103,10 @@ void ReloadList()
                        orderby score descending
                        select row;
 
-        list.SetSource(filtered.Take(listHeight).ToList());
-
+        currentRows = filtered.Take(listHeight).ToList();
+        list.SetSource(currentRows);
+        list.CanFocus = true; // HACK for not knowing how to set initial focus
     }
-
 }
 
 List<string> cannedRows() => new List<string>() {
