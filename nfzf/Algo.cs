@@ -137,8 +137,8 @@ public static class Algo
             return new(new(startIdx, endIdx, r.score), r.pos);
         }
 
-        Result res = new(0, 0, 0);
-        return new(res, new int[0]);
+        Result res = new(-1, -1, 0);
+        return new(res, null);
     }
 
     private static int indexAt(int index, int max, bool forward) => forward ? index : max - index - 1;
@@ -213,7 +213,7 @@ public static class Algo
                 // TODO
             }
 
-            if (c == pattern[pidx])
+            if ( c == pattern[pidx] )
             {
                 if(withPos)
                     pos.Add(idx);
