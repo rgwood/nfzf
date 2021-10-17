@@ -100,6 +100,17 @@ public class AlgoTests
         result.Score.Should().Be(expectedScore);
 }
 
+    [Fact(Skip ="noisy")]
+    public void TestFuzzyMatchBackward()
+    {
+        AssertMatchV1(false, true, "foobar fb", "fb", 0, 4,
+                    ScoreMatch * 2 + BonusBoundary * BonusFirstCharMultiplier +
+                        ScoreGapStart + ScoreGapExtension);
+
+        AssertMatchV1(false, false, "foobar fb", "fb", 7, 9,
+            ScoreMatch * 2 + BonusBoundary * BonusFirstCharMultiplier + BonusBoundary);
+    }
+
     [Fact]
     public void TestEmptyPattern()
     {
