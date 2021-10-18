@@ -1,12 +1,15 @@
 namespace nfzf.Tests;
 
 using FluentAssertions;
+using global::VerifyTests;
 using nfzf;
 using System;
+using VerifyXunit;
 using Xunit;
 
 using static nfzf.Algo;
 
+[UsesVerify]
 public class AlgoTests
 {
     [Fact]
@@ -65,11 +68,9 @@ public class AlgoTests
     [InlineData(true, true, "Foo Bar Baz", "fbb", -1, -1, 0)]
     [InlineData(true, true, "fooBarbaz", "fooBarbazz", -1, -1, 0)]
 
-    public void AssertMatchV1(
+    public async Task AssertMatchV1(
         bool caseSensitive, bool forward, string input, string pattern, int sidx, int eidx, int expectedScore)
     {
-
-
         if (!caseSensitive)
             pattern = pattern.ToLower();
 
@@ -98,9 +99,24 @@ public class AlgoTests
         end.Should().Be(eidx);
 
         result.Score.Should().Be(expectedScore);
-}
 
-    [Fact(Skip ="noisy")]
+        const bool assertSnapshotVerification = false; // for now!
+        if (assertSnapshotVerification)
+        {
+            var logs = $"Validation";
+            var settings = new VerifySettings();
+
+            string paramsStr = $"{(caseSensitive ? "sensitive" : "insensitive")}_{(forward ? "forward" : "backward")}_{input}_{pattern}_sidx_{sidx}_eidx_{eidx}";
+            settings.UseTextForParameters(paramsStr);
+
+            //settings.UseParameters(caseSensitive, forward, input, pattern, sidx, eidx, expectedScore);
+            settings.UseDirectory("Snapshots");
+
+            await Verifier.Verify(logs, settings);
+        }
+    }
+
+    [Fact(Skip ="Backward matching still has bugs")]
     public void TestFuzzyMatchBackward()
     {
         AssertMatchV1(false, true, "foobar fb", "fb", 0, 4,
